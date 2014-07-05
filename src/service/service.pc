@@ -1,0 +1,114 @@
+#include "public.h"
+#include "atmi.h"
+
+#define BUF_SIZE 100
+
+/************************************************
+  函数名称:sv_connect
+  函数功能:连接数据库
+  输入参数:
+  TPSVCINFO *rqst;不用
+  输出参数:TPSVCINFO *rqst;不用
+  返 回 值:无
+ ************************************************/
+void sv_connect(TPSVCINFO *rqst)
+{
+    EXEC SQL BEGIN DECLARE SECTION;
+    char username[100]="hsta";
+    char password[100]="hsta";
+    char server[100]="ta";
+    EXEC SQL END DECLARE SECTION;
+
+    char *sBuf = NULL;
+    sBuf = tpalloc("STRING",NULL,BUF_SIZE);
+    if(sBuf == NULL) {
+        WriteLog(0,"分配内存错误！");
+        return ;
+    }
+    WriteLog(0, "连接数据库:%s/%s@%s\n", username, password, server);
+    /* 连接到数据库 */
+    EXEC SQL CONNECT :username IDENTIFIED BY :password USING :server;
+    //EXEC SQL CONNECT :"hsta/hsta@ta";
+    if (sqlca.sqlcode < 0)
+    {
+        WriteLog(0,"connect oracle error:%.*s",sqlca.sqlerrm.sqlerrml,sqlca.sqlerrm.sqlerrmc);
+        sprintf(sBuf,"7002;数据库连接失败:%.*s",sqlca.sqlerrm.sqlerrml,sqlca.sqlerrm.sqlerrmc);
+    }
+    else
+        strcpy(sBuf,"0");
+    
+    EXEC SQL select sysdate into :username from dual;
+    WriteLog(0, "数据库时间:%s\n",username);
+        
+    oraca.oradbgf  = 1;              /* enable debug operations */
+    oraca.oracchf  = 1;             /* gather cursor cache statistics */
+    oraca.orastxtf = 3;              /* always save the SQL statement */
+    tpreturn(TPSUCCESS, 0, sBuf, 0L, 0);
+}
+
+/*******************************************
+  函数名称:sv_update
+  函数功能: 测试
+  输入参数:
+  TPSVCINFO *rqst; 
+  rqst->data格式：NAME
+  输出参数:TPSVCINFO *rqst;
+  成功：0;OK
+  失败：1;错误原因
+  返 回 值:无
+ *******************************************/
+void sv_update(TPSVCINFO *rqst)
+{
+    char *sBuf = NULL;
+    sBuf = tpalloc("STRING",NULL,BUF_SIZE);
+    if(sBuf == NULL) {
+        WriteLog(0,"分配内存错误！");
+        return ;
+    }
+    WriteLog(0,"预处理开始\n");
+
+		WriteLog(0, "请求参数:%s\n",rqst->data);
+
+    if(TOUPPER(rqst->data) != 0){
+        sprintf(sBuf,"1;%s","ERROR!");
+    }
+    else
+        strcpy(sBuf,"0;OK!");
+    WriteLog(0,"预处理完成\n");
+    tpreturn(TPSUCCESS, 0, sBuf, 0L, 0);
+}
+
+/*******************************************
+  函数名称:sv_check
+  函数功能: 测试
+  输入参数:
+  TPSVCINFO *rqst; 
+  rqst->data格式：NAME
+  输出参数:TPSVCINFO *rqst;
+  成功：0;OK
+  失败：1;错误原因
+  返 回 值:无
+ *******************************************/
+void sv_check(TPSVCINFO *rqst)
+{
+    int i = 0;
+    int j = 0;
+    char *sBuf = NULL;
+	    WriteLog(0,"预处理开始\n");
+    sBuf = tpalloc("STRING",NULL,BUF_SIZE);
+    if(sBuf == NULL) {
+        WriteLog(0,"分配内存错误！");
+        return ;
+    }
+
+    strcpy(sBuf, rqst->data);
+
+    WriteLog(0, "请求参数:%s, 长度:%d\n",sBuf, strlen(sBuf));
+
+    j = atoi(sBuf);
+
+
+
+    WriteLog(0,"预处理完成%d\n", j);
+    tpreturn(TPSUCCESS, 0, sBuf, 0L, 0);
+}

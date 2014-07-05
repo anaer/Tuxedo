@@ -1,0 +1,27 @@
+*RESOURCES
+IPCKEY 55001 
+MASTER SITE1
+MAXACCESSERS    400
+MAXSERVERS	200
+MAXSERVICES 	400
+MODEL SHM
+*MACHINES
+"HUNDSUN-6786F09" LMID=SITE1
+    TUXDIR="C:\bea\tuxedo8.1"
+    APPDIR="E:\code\Tuxedo\bin" 
+    TUXCONFIG="E:\code\Tuxedo\etc\tuxconfig"
+    ULOGPFX="E:\code\Tuxedo\log\ULOG"
+    
+    MAXWSCLIENTS=100
+*GROUPS
+GROUP1 LMID=SITE1 GRPNO=1 
+*SERVERS
+service SRVGRP=GROUP1 SRVID=1 
+
+WSL SRVGRP=GROUP1 SRVID=5 CLOPT="-A -t -- -n //127.0.0.1:2223  -m 1 -M 5 -x 3"   #WSL∑¢≤ºµÿ÷∑
+
+*SERVICES
+sv_connect 
+sv_check 
+sv_update 
+

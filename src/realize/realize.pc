@@ -1,0 +1,22 @@
+#include "atmi.h"
+#include "public.h"
+
+/*包含TUXEDO系统头文件"atmi.h"*/
+/*从客户端收到的数据放在TPSVCINFO结构中，是唯一的入参*/
+
+int TOUPPER (const char *inbuf)
+{
+
+    EXEC SQL WHENEVER SQLERROR goto sqlerr;
+
+    //EXEC SQL UPDATE  plsqltest SET salary=256 WHERE name=:inbuf;
+    //EXEC SQL COMMIT WORK;
+    WriteLog(0,"update successfully.");
+
+    return 0;
+
+sqlerr:
+
+    WriteLog(0, "%.*s\n", sqlca.sqlerrm.sqlerrml, sqlca.sqlerrm.sqlerrmc);
+    return -1;
+}
