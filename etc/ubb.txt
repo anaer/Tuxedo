@@ -6,11 +6,11 @@ MAXSERVERS	200
 MAXSERVICES 	400
 MODEL SHM
 *MACHINES
-"HUNDSUN-6786F09" LMID=SITE1
+"PC-NAME" LMID=SITE1
     TUXDIR="C:\bea\tuxedo8.1"
-    APPDIR="E:\code\Tuxedo\bin" 
-    TUXCONFIG="E:\code\Tuxedo\etc\tuxconfig"
-    ULOGPFX="E:\code\Tuxedo\log\ULOG"
+    APPDIR="E:\anaer\Tuxedo\bin" 
+    TUXCONFIG="E:\anaer\Tuxedo\etc\tuxconfig"
+    ULOGPFX="E:\anaer\Tuxedo\log\ULOG"
     
     MAXWSCLIENTS=100
 *GROUPS
